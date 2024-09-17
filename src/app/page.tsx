@@ -1,4 +1,5 @@
 import Chatbot from '@/components/Chatbot.tsx/ChatBot';
+import StockMarquee from '@/components/carrossel';
 import Head from 'next/head';
 import { FC } from 'react';
 import { FaMoneyBillWave, FaChartLine, FaBitcoin } from 'react-icons/fa';
@@ -6,25 +7,23 @@ import { FaMoneyBillWave, FaChartLine, FaBitcoin } from 'react-icons/fa';
 const Economia: FC = () => {
   return (
     <>
-      <Head>
-        <title>Economia e Investimentos</title>
-        <meta name="description" content="Informações e notícias sobre economia, investimentos, inflação mundial e criptomoedas." />
-      </Head>
-
       {/* Header */}
       <header className="bg-blue-900 text-white p-4 fixed w-full top-0 z-10 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold">InfoEconomia</h1>
-          <nav className="space-x-4">
+          <nav className="space-x-6">
             <a href="#investimento" className="hover:text-gray-300">Investimentos</a>
             <a href="#inflacao" className="hover:text-gray-300">Inflação</a>
             <a href="#criptomoedas" className="hover:text-gray-300">Criptomoedas</a>
+            <a href="#perfil" className="hover:text-gray-300">Minha Conta</a>
           </nav>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="pt-20 bg-slate-800 min-h-screen">
+      <main className="pt-16 bg-slate-800 min-h-screen">
+        <StockMarquee/>
+
         {/* Banner */}
         <section className="bg-cover bg-center h-64 flex items-center justify-center text-white" style={{ backgroundImage: 'url("/banner.jpg")' }}>
           <h2 className="text-4xl font-bold">Tudo sobre Economia e Investimentos</h2>
@@ -32,10 +31,10 @@ const Economia: FC = () => {
 
         {/* Investimento Section */}
         <section id="investimento" className="container mx-auto p-6 mt-8">
-          <h2 className="text-3xl font-semibold flex items-center mb-4">
+          <h2 className="text-3xl font-semibold flex items-center mb-4 text-white">
             <FaMoneyBillWave className="text-blue-500 mr-2" /> Investimentos
           </h2>
-          <p className="leading-relaxed mb-6">
+          <p className="leading-relaxed mb-6 text-white">
             Investir é essencial para construir um futuro financeiro sólido. Existem diversas opções, como ações, títulos públicos e fundos imobiliários, cada uma com seu perfil de risco e retorno. Conhecer e diversificar seus investimentos é uma estratégia eficaz para maximizar ganhos e minimizar riscos.
           </p>
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-black">
@@ -80,7 +79,7 @@ const Economia: FC = () => {
 
         {/* Notícias Section */}
         <section className="container mx-auto p-6 mt-8">
-          <h2 className="text-3xl font-semibold mb-4">Últimas Notícias</h2>
+          <h2 className="text-3xl font-semibold mb-4 text-white">Últimas Notícias</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-black">
             <article className="bg-white p-4 rounded-lg shadow-md">
               <h3 className="font-semibold text-lg mb-2">Mercado de Ações em Alta</h3>

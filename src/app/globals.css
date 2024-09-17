@@ -25,3 +25,14 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Adicionando a animação do carrossel */
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: flex;
+  animation: marquee 30s linear infinite;
+}
