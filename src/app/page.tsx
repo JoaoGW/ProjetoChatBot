@@ -7,6 +7,13 @@ import { FaMoneyBillWave, FaChartLine, FaBitcoin } from 'react-icons/fa';
 const Economia: FC = () => {
   return (
     <>
+      <Head>
+        <title>InfoEconomia - Tudo sobre Economia e Investimentos</title>
+        <meta name="description" content="InfoEconomia é o seu portal para informações e atualizações sobre investimentos, inflação mundial e criptomoedas." />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
       {/* Header */}
       <header className="bg-blue-900 text-white p-4 fixed w-full top-0 z-10 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
@@ -22,7 +29,7 @@ const Economia: FC = () => {
 
       {/* Main Content */}
       <main className="pt-16 bg-slate-800 min-h-screen">
-        <StockMarquee/>
+        <StockMarquee />
 
         {/* Banner */}
         <section className="bg-cover bg-center h-64 flex items-center justify-center text-white" style={{ backgroundImage: 'url("/banner.jpg")' }}>
