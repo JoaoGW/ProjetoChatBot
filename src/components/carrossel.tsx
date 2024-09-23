@@ -32,7 +32,7 @@ const stocks: StockItem[] = [
 
 const StockMarquee: React.FC = () => {
     return (
-        <div className="overflow-hidden whitespace-nowrap bg-white border-t border-b border-neutral-400">
+        <div className="overflow-hidden whitespace-nowrap bg-white border-t border-b border-neutral-400 text-black">
             <div className="flex animate-marquee">
                 {stocks.map((stock, index) => (
                     <a key={index} href={stock.url} className="relative hover:bg-neutral-200 hover:cursor-pointer px-4 py-2 text-xs flex items-center gap-2 border-r border-neutral-400 last:border-r-0">
