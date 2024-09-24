@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<Response> {
     try {
+        //Definicao dos valores de rota de fetch
+        const news_url = "https://newsapi.org/v2/everything?q=bitcoin&from=2024-09-01&sortBy=publishedAt&apiKey="
+        const key = process.env.NEWS_KEY
+        const country = request.nextUrl.searchParams.get('country') || 'br';
+
         //Rota da api com a minha KEY pessoal
-        const response = await fetch("https://newsapi.org/v2/everything?q=bitcoin&from=2024-09-01&sortBy=publishedAt&apiKey=36ce6757c2394ea59c29b3e64fa9f4f3")
+        const response = await fetch(`${news_url}${key}`)
 
         //Verifica o resultado da response do fetch
         if(!response.ok){
@@ -15,6 +20,6 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ data }, { status: 200 });
     } catch (error) {
         //Retorno de erro para caso ocorra algum erro na requisicao, adivindo de !ok
-        return NextResponse.json({ message: "Ocorreu um problema na requisição" }, { status: 500 });
+        return NextResponse.json({ message: "Ocorreu um problema na requisição das noticias" }, { status: 500 });
     }
 }
