@@ -28,8 +28,6 @@ const stocks: StockItem[] = [
     { name: 'SBSP3', value: 'R$29,20', change: '-0,85%', url: '/sbsp3' },
 ];
 
-
-
 const StockMarquee: React.FC = () => {
     return (
         <div className="overflow-hidden whitespace-nowrap bg-white border-t border-b border-neutral-400 text-black">

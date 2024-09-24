@@ -65,7 +65,7 @@ const Economia: FC = () => {
         </section>
 
         {/* Inflação Mundial Section */}
-        <section id="inflacao" className="container mx-auto p-6 mt-8 bg-white rounded-lg shadow-md text-black">
+        <section id="inflacao" className="container mx-auto p-6 mt-8 bg-white rounded-lg shadow-md text-black md:w-3/4">
           <h2 className="text-3xl font-semibold flex items-center mb-4">
             <FaChartLine className="text-blue-500 mr-2" /> Inflação Mundial
           </h2>
@@ -75,7 +75,7 @@ const Economia: FC = () => {
         </section>
 
         {/* Criptomoedas Section */}
-        <section id="criptomoedas" className="container mx-auto p-6 mt-8 bg-white rounded-lg shadow-md text-black">
+        <section id="criptomoedas" className="container mx-auto p-6 mt-8 bg-white rounded-lg shadow-md text-black md:w-3/4">
           <h2 className="text-3xl font-semibold flex items-center mb-4">
             <FaBitcoin className="text-blue-500 mr-2" /> Criptomoedas
           </h2>
