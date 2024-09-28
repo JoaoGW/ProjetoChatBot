@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { NEWS_KEY } from '../../../../envLocal';
 
 export async function GET(request: NextRequest): Promise<Response> {
     try {
-        // Definicao dos valores de rota de fetch
-        const key = NEWS_KEY;
+        //Captura e verificacao da existencia da chave
+        const key = process.env.NEWS_KEY
+        if(!key){
+            return NextResponse.json({ message: "Nao ha uma chave de API disponivel" }, { status: 401 })
+        }
 
         // Definicao da localizacao preferida das noticias a serem recebidas
         const country = request.nextUrl.searchParams.get('country') || 'br';
