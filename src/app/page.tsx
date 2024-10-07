@@ -32,7 +32,7 @@ const Economia: FC = () => {
         <StockMarquee />
 
         {/* Banner */}
-        <section className="bg-cover bg-center h-64 flex items-center justify-center text-white" style={{ backgroundImage: 'url("/banner.jpg")' }}>
+        <section className="bg-cover bg-center h-64 flex items-center justify-center text-white" style={{ backgroundImage: 'url("https://www.google.com/url?sa=i&url=https%3A%2F%2Fpt.pikbest.com%2Fbackgrounds%2Fqiantu-financial-economy-stock-banner-poster_2756452.html&psig=AOvVaw2Mzy5We1fGKcQMxRs1gLao&ust=1727467807037000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCNDr6-a14YgDFQAAAAAdAAAAABAE  ")' }}>
           <h2 className="text-4xl font-bold">Tudo sobre Economia e Investimentos</h2>
         </section>
 
@@ -65,7 +65,7 @@ const Economia: FC = () => {
         </section>
 
         {/* Inflação Mundial Section */}
-        <section id="inflacao" className="container mx-auto p-6 mt-8 bg-white rounded-lg shadow-md text-black">
+        <section id="inflacao" className="container mx-auto p-6 mt-8 bg-white rounded-lg shadow-md text-black md:w-3/4">
           <h2 className="text-3xl font-semibold flex items-center mb-4">
             <FaChartLine className="text-blue-500 mr-2" /> Inflação Mundial
           </h2>
@@ -75,7 +75,7 @@ const Economia: FC = () => {
         </section>
 
         {/* Criptomoedas Section */}
-        <section id="criptomoedas" className="container mx-auto p-6 mt-8 bg-white rounded-lg shadow-md text-black">
+        <section id="criptomoedas" className="container mx-auto p-6 mt-8 bg-white rounded-lg shadow-md text-black md:w-3/4">
           <h2 className="text-3xl font-semibold flex items-center mb-4">
             <FaBitcoin className="text-blue-500 mr-2" /> Criptomoedas
           </h2>
