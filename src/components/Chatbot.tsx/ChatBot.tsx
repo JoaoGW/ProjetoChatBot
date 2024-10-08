@@ -1,5 +1,4 @@
 "use client"; 
-
 import React, { useState } from 'react';
 import { FaComments, FaTimes } from 'react-icons/fa';
 import { RiRobot3Line } from 'react-icons/ri';
@@ -9,6 +8,9 @@ const Chatbot: React.FC = () => {
   const [escolha, setEscolha] = useState<string | null>(null); // Escolha do usuario
   const [ajuda, setAjuda] = useState<boolean>(false);  // Mensagem 'sim' ou 'nao'
   const [encerrarChat, setEncerrarChat] = useState<boolean>(false); // Chat é encerrado
+  const [categoria, setCategoria] = useState<string>('tesla'); // Categoria de notícias
+  const [noticias, setNoticias] = useState<any[]>([]);  // Armazena as notícias retornadas
+  const [loading, setLoading] = useState<boolean>(false);  // Indica se está carregando
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
@@ -16,12 +18,15 @@ const Chatbot: React.FC = () => {
       setEscolha(null);  
       setAjuda(false); 
       setEncerrarChat(false); 
+      setNoticias([]); // Limpa as notícias ao fechar o chat
     }
   };
 
   const Opcao = (escolha: string) => {
     setEscolha(escolha);
-    setAjuda(true); 
+    setAjuda(true);
+    setCategoria(escolha); // Define a categoria baseada na escolha do usuário
+    fetchNoticias(escolha); // Chama a função para buscar notícias ao clicar na opção
   };
 
   const receberAjuda = (escolha: string) => {
@@ -30,6 +35,20 @@ const Chatbot: React.FC = () => {
     } else if (escolha === 'sim') {
       setEscolha(null); 
       setAjuda(false);  
+    }
+  };
+
+  const fetchNoticias = async (categoriaEscolhida: string) => {
+    setLoading(true);  // Inicia o estado de carregamento
+    try {
+      const response = await fetch(`/api/noticias?categoria=${categoriaEscolhida}`);
+      const data = await response.json();
+      setNoticias(data.data.articles);  // Armazena as notícias no estado
+      console.log("Resultado: ", noticias);
+      setLoading(false);  // Finaliza o estado de carregamento
+    } catch (error) {
+      console.error("Erro ao buscar notícias:", error);
+      setLoading(false);  // Finaliza o estado de carregamento em caso de erro
     }
   };
 
@@ -65,19 +84,19 @@ const Chatbot: React.FC = () => {
             {!encerrarChat && (
               <div className="mt-4 flex flex-col space-y-1">
                 <button
-                  onClick={() => Opcao('financeiro')}
+                  onClick={() => Opcao('business')}
                   className="bg-blue-600 text-white p-2 rounded-lg"
                 >
                   Receber notícias financeiras
                 </button>
                 <button
-                  onClick={() => Opcao('cripto')}
+                  onClick={() => Opcao('crypto')}
                   className="bg-blue-600 text-white p-2 rounded-lg"
                 >
                   Aprender sobre criptomoeda
                 </button>
                 <button
-                  onClick={() => Opcao('acao')}
+                  onClick={() => Opcao('stocks')}
                   className="bg-blue-600 text-white p-2 rounded-lg"
                 >
                   Informações sobre ações
@@ -88,23 +107,45 @@ const Chatbot: React.FC = () => {
             {escolha && !encerrarChat && (
               <div className="relative bg-gray-200 text-black p-3 rounded-lg self-end shadow-md max-w-max">
                 <div>
-                  {escolha === 'financeiro' && "Receber notícias financeiras"}
-                  {escolha === 'cripto' && "Aprender sobre criptomoeda"}
-                  {escolha === 'acao' && "Informações sobre ações"}
+                  {escolha === 'business' && "Receber notícias financeiras"}
+                  {escolha === 'crypto' && "Aprender sobre criptomoeda"}
+                  {escolha === 'stocks' && "Informações sobre ações"}
                 </div>
                 <div className="absolute -right-2 top-4 w-0 h-0 border-t-[10px] border-t-transparent border-l-[10px] border-l-gray-200 border-b-[10px] border-b-transparent"></div>
               </div>
             )}
 
-            {/* Tem que fazer funcionar a API */}
-            {escolha && !encerrarChat && (
+            {/* Mensagem de carregamento */}
+            {loading && (
+              <div className="relative bg-blue-100 text-black p-3 rounded-lg self-start shadow-md max-w-max">
+                <div>Buscando notícias, por favor aguarde...</div>
+                <div className="absolute -left-2 top-4 w-0 h-0 border-t-[10px] border-t-transparent border-r-[10px] border-r-blue-100 border-b-[10px] border-b-transparent"></div>
+              </div>
+            )}
+
+            {/* Respostas dinâmicas baseadas nas categorias */}
+            {escolha && !encerrarChat && !loading && (
               <div className="relative bg-blue-100 text-black p-3 rounded-lg self-end shadow-md max-w-max">
                 <div>
-                  {escolha === 'financeiro' && "Aqui estão algumas notícias sobre área financeira:"}
-                  {escolha === 'cripto' && "Aqui estão informações sobre criptomoedas:"}
-                  {escolha === 'acao' && "Aqui estão algumas informações sobre ações:"}
+                  {escolha === 'tesla' && "Aqui estão algumas notícias sobre área financeira:"}
+                  {escolha === 'apple' && "Aqui estão informações sobre criptomoedas:"}
+                  {escolha === 'business' && "Aqui estão algumas informações sobre ações:"}
                 </div>
                 <div className="absolute -right-2 top-4 w-0 h-0 border-t-[10px] border-t-transparent border-l-[10px] border-l-gray-200 border-b-[10px] border-b-transparent"></div>
+              </div>
+            )}
+
+            {/* Exibição das notícias */}
+            {!loading && noticias.length > 0 && (
+              <div className="space-y-3">
+                {noticias.map((noticia, index) => (
+                  <div key={index} className="relative bg-gray-100 text-black p-3 rounded-lg self-start shadow-md">
+                    <a href={noticia.url} target="_blank" rel="noopener noreferrer" className="font-bold underline">
+                      {noticia.title}
+                    </a>
+                    <p>{noticia.description}</p>
+                  </div>
+                ))}
               </div>
             )}
 
