@@ -11,8 +11,8 @@ const Chatbot: React.FC = () => {
   const [escolha, setEscolha] = useState<string | null>(null); // Escolha do usuario
   const [ajuda, setAjuda] = useState<boolean>(false);  // Mensagem 'sim' ou 'nao'
   const [encerrarChat, setEncerrarChat] = useState<boolean>(false); // Chat é encerrado
-  let [pontuacao, setPontuacao] = useState<number>(0);  
-  let [indicePergunta, setPergunta] = useState(0);
+  const [pontuacao, setPontuacao] = useState<number>(0);  
+  const [indicePergunta, setPergunta] = useState(0);
 
 
   const toggleChat = () => {
@@ -44,9 +44,8 @@ const Chatbot: React.FC = () => {
     return(
       <div>
       {item.respostas.map((resposta, index) => ( 
-        <div style={{marginBottom:"15px"}}>
+        <div key={index} style={{marginBottom:"15px"}}>
       <button
-        key={index}
         className="bg-blue-600 text-white p-2 rounded-lg"
         onClick = {() => irParaProximaPergunta(index)}
         >     
