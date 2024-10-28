@@ -12,7 +12,7 @@ export async function GET(request: NextRequest): Promise<Response> {
         const country = request.nextUrl.searchParams.get('country') || 'br';
 
         // Rota da api com a minha KEY pessoal, usando template string corretamente
-        const response = await fetch(`https://newsapi.org/v2/everything?q=stock&language=pt&from=2024-10-01&to=2024-10-07&sortBy=popularity&apiKey=${key}`);
+        const response = await fetch(`https://newsapi.org/v2/everything?q=stock&language=pt&from=2024-10-21&to=2024-10-28&sortBy=popularity&apiKey=${key}`);
 
         // Verifica o resultado da response do fetch
         if (!response.ok) {

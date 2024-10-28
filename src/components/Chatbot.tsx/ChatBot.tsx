@@ -255,10 +255,6 @@ const Chatbot: React.FC = () => {
               </div>
             )}
 
-            
-            
-
-           
            {escolha && !encerrarChat && escolha === 'noticias'&& (
               <div className="mt-4 flex flex-col space-y-1">
                 <button
@@ -279,8 +275,8 @@ const Chatbot: React.FC = () => {
             {(escolha === 'notSim'|| escolha === 'notNão' ) && !encerrarChat && (
               <div className="relative bg-gray-200 text-black p-3 rounded-lg self-end shadow-md max-w-max">
                 <div>
-                {escolha === 'notSim' && "iremos mandar as noticias"}
-                  {escolha === 'notNão' && "Não iremos mandar as noticias"}
+                {escolha === 'notSim' && "Notificaremos você com as noticias mais relevantes"}
+                  {escolha === 'notNão' && "Entendido! Não mandaremos as noticias."}
                 </div>
                 <div className="absolute -right-2 top-4 w-0 h-0 border-t-[10px] border-t-transparent border-l-[10px] border-l-gray-200 border-b-[10px] border-b-transparent"></div>
               </div>

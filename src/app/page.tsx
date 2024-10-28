@@ -1,10 +1,57 @@
+'use client'
 import Chatbot from '@/components/Chatbot.tsx/ChatBot';
 import StockMarquee from '@/components/carrossel';
 import Head from 'next/head';
-import { FC } from 'react';
+import { useEffect, useState } from 'react';
 import { FaMoneyBillWave, FaChartLine, FaBitcoin } from 'react-icons/fa';
 
-const Economia: FC = () => {
+interface Source {
+  id: number;
+  name: string;
+}
+
+interface Noticias {
+  source: Source;
+  author: string;
+  title: string;
+  description: string;
+  url: string;
+  urlToImage: string;
+  publishedAt: string;
+  content: string;
+}
+
+export default function Economia() {
+  const [noticias, setNoticias] = useState<Noticias[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+
+  // Fetching das notícias, filtrando apenas com conteúdo classificado como válido
+  const noticiasData = async () => {
+    try {
+      const response = await fetch('/api/noticias');
+      if (!response.ok) {
+        throw new Error("A rota falhou ao buscar informações do servidor");
+      }
+
+      const data = await response.json();
+      // Verifica se data.data é um array antes de atualizar o estado
+      if (Array.isArray(data.data)) {
+        setNoticias(data.data);
+      } else {
+        throw new Error("Os dados recebidos não são um array");
+      }
+    } catch (error) {
+      setError((error as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    noticiasData();
+  }, []);
+
   return (
     <>
       <Head>
@@ -32,7 +79,7 @@ const Economia: FC = () => {
         <StockMarquee />
 
         {/* Banner */}
-        <section className="bg-cover bg-center h-64 flex items-center justify-center text-white" style={{ backgroundImage: 'url("https://www.google.com/url?sa=i&url=https%3A%2F%2Fpt.pikbest.com%2Fbackgrounds%2Fqiantu-financial-economy-stock-banner-poster_2756452.html&psig=AOvVaw2Mzy5We1fGKcQMxRs1gLao&ust=1727467807037000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCNDr6-a14YgDFQAAAAAdAAAAABAE  ")' }}>
+        <section className="bg-cover bg-center h-64 flex items-center justify-center text-white" style={{ backgroundImage: 'url("/path/to/image.jpg")' }}>
           <h2 className="text-4xl font-bold">Tudo sobre Economia e Investimentos</h2>
         </section>
 
@@ -88,25 +135,20 @@ const Economia: FC = () => {
         <section className="container mx-auto p-6 mt-8">
           <h2 className="text-3xl font-semibold mb-4 text-white">Últimas Notícias</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-black">
-            <article className="bg-white p-4 rounded-lg shadow-md">
-              <h3 className="font-semibold text-lg mb-2">Mercado de Ações em Alta</h3>
-              <p>Os índices das bolsas globais apresentam recuperação, impulsionados pelos bons resultados das empresas de tecnologia.</p>
-            </article>
-            <article className="bg-white p-4 rounded-lg shadow-md">
-              <h3 className="font-semibold text-lg mb-2">Inflação na Zona do Euro</h3>
-              <p>A inflação na Zona do Euro atinge recorde em 2024, colocando pressão sobre as políticas econômicas do bloco.</p>
-            </article>
-            <article className="bg-white p-4 rounded-lg shadow-md">
-              <h3 className="font-semibold text-lg mb-2">Bitcoin em Alta</h3>
-              <p>Após um período de baixa, o Bitcoin mostra sinais de recuperação, despertando o interesse de investidores ao redor do mundo.</p>
-            </article>
+            {noticias.map((data, index) => (
+              <article key={index} className="bg-white p-4 rounded-lg shadow-md">
+                <h3 className="font-semibold text-lg mb-2">{data.title}</h3>
+                <p className="truncate">{data.description}</p>
+                <div className="flex flex-row">
+                  <p>{data.author} - </p>
+                  <p>{data.source.name}</p>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
-
         <Chatbot />
       </main>
     </>
   );
-};
-
-export default Economia;
+}
