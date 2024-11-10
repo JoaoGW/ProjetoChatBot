@@ -1,9 +1,10 @@
-"use client"; 
+"use client";
 
 import React, { use, useState } from 'react';
 import { FaComments, FaTimes } from 'react-icons/fa';
 import { RiRobot3Line } from 'react-icons/ri';
 import questionario from './perguntas';
+import duvidas from './duvidas';
 
 
 const Chatbot: React.FC = () => {
@@ -11,17 +12,59 @@ const Chatbot: React.FC = () => {
   const [escolha, setEscolha] = useState<string | null>(null); // Escolha do usuario
   const [ajuda, setAjuda] = useState<boolean>(false);  // Mensagem 'sim' ou 'nao'
   const [encerrarChat, setEncerrarChat] = useState<boolean>(false); // Chat é encerrado
-  const [pontuacao, setPontuacao] = useState<number>(0);  
+  const [pontuacao, setPontuacao] = useState<number>(0);
   const [indicePergunta, setPergunta] = useState(0);
+  const [indiceDuvida, setDuvida] = useState(0);
+  const [resp, setResp] = useState<string | null>(null);
 
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
     if (!isOpen) {
-      setEscolha(null);  
-      setAjuda(false); 
-      setEncerrarChat(false); 
+      setEscolha(null);
+      setAjuda(false);
+      setEncerrarChat(false);
     }
+  };
+
+  const togglePontuacao = (resposta: string) => {
+    setPontuacao(0)
+    setPergunta(0)
+    receberAjuda(resposta)
+  }
+
+  const RespPerfil = ({ pontuacao }: { pontuacao: number }) => {
+    if (pontuacao <= 5) setResp("Você é um investidor conservador");
+    if (pontuacao > 5 && pontuacao <= 10) setResp("Você é um investidor moderado");
+    if (pontuacao > 10) setResp("Você é um investidor arrojado");
+    console.log("a pontuação eh" + pontuacao)
+    return (
+      <>
+        <div className="relative bg-blue-100 text-black p-3 rounded-lg self-start shadow-md max-w-max">
+          {resp}
+        </div>
+        <div className="relative bg-blue-100 text-black p-3 rounded-lg self-start shadow-md max-w-max">
+          <div>Posso ajudar em mais alguma coisa?</div>
+          <div className="absolute -left-2 top-4 w-0 h-0 border-t-[10px] border-t-transparent border-r-[10px] border-r-blue-100 border-b-[10px] border-b-transparent"></div>
+        </div>
+
+        <div className="mt-4 flex flex-row space-x-2">
+          <button
+            onClick={() => togglePontuacao('sim')}
+            className="bg-blue-600 text-white p-2 rounded-lg"
+          >
+            Sim
+          </button>
+          <button
+            onClick={() => togglePontuacao('nao')}
+            className="bg-blue-600 text-white p-2 rounded-lg"
+          >
+            Não
+          </button>
+        </div>
+      </>
+
+    );
   };
 
   const irParaProximaPergunta = (index: number) => {
@@ -29,45 +72,110 @@ const Chatbot: React.FC = () => {
     // Verifica se ainda há perguntas disponíveis
     if (indicePergunta < questionario.length - 1) {
       setPergunta(indicePergunta + 1); // Atualiza o índice corretamente
-        setPontuacao(pontuacao + index )
-        }
-    else{
-      setPergunta(0)
-      setPontuacao(0)
-      setEscolha('sair')
+      setPontuacao(pontuacao + index)
+    }
+    // else if(indicePergunta === questionario.length - 2){
+    //   setEscolha('respostaPerfil')
+    // }
+    else {
+      Opcao('respPerfil')
+      // setEscolha('sair')
+      console.log(indicePergunta, pontuacao)
     }
   };
 
-  const ImprimeResposta = () =>{
+  const ImprimeResposta = () => {
     const item = questionario[indicePergunta]
     //const resposta = questionario.pergunta1.respostas
-    return(
+    return (
       <div>
-      {item.respostas.map((resposta, index) => ( 
-        <div key={index} style={{marginBottom:"15px"}}>
-      <button
-        className="bg-blue-600 text-white p-2 rounded-lg"
-        onClick = {() => irParaProximaPergunta(index)}
-        >     
-        {resposta}
-      </button>
+        {item.respostas.map((resposta, index) => (
+          <div key={index} style={{ marginBottom: "15px" }}>
+            <button
+              className="bg-blue-600 text-white p-2 rounded-lg"
+              onClick={() => irParaProximaPergunta(index)}
+            >
+              {resposta}
+            </button>
+          </div>
+        ))}
       </div>
-      ))}
-    </div>
     )
   }
 
   const Opcao = (escolha: string) => {
     setEscolha(escolha);
-    setAjuda(true); 
+    setAjuda(true);
+  };
+
+  const ImprimeRespDuvidas = () => {
+    const item = duvidas[indiceDuvida]
+    return (
+      <>
+    <div>
+      {item.respostas.map((resposta, index) => (
+        <div key={index} style={{ marginBottom: "15px" }}>
+          <button
+            className="bg-blue-600 text-white p-2 rounded-lg"
+            onClick={() => { }}
+          >
+            {resposta}
+          </button>
+        </div>
+      ))}
+    </div>
+    <div className="relative bg-blue-100 text-black p-3 rounded-lg self-start shadow-md max-w-max">
+          <div>Posso ajudar em mais alguma coisa?</div>
+          <div className="absolute -left-2 top-4 w-0 h-0 border-t-[10px] border-t-transparent border-r-[10px] border-r-blue-100 border-b-[10px] border-b-transparent"></div>
+        </div>
+
+        <div className="mt-4 flex flex-row space-x-2">
+          <button
+            onClick={() => receberAjuda('sim')}
+            className="bg-blue-600 text-white p-2 rounded-lg"
+          >
+            Sim
+          </button>
+          <button
+            onClick={() => receberAjuda('nao')}
+            className="bg-blue-600 text-white p-2 rounded-lg"
+          >
+            Não
+          </button>
+        </div>
+    </>
+    )
+  }
+
+  const chamaRespDuvidas = (index: number) => {
+    setDuvida(index)
+    setEscolha('respDuvida')
+  }
+
+
+  const ImprimeDuvidas = () => {
+    return (
+      <div>
+        {duvidas.map((item, index) => (
+          <div key={index} style={{ marginBottom: "15px" }}>
+            <button
+              className="bg-blue-600 text-white p-2 rounded-lg"
+              onClick={() => chamaRespDuvidas(index)}
+            >
+              {item.duvida}
+            </button>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   const receberAjuda = (escolha: string) => {
     if (escolha === 'nao') {
-      setEncerrarChat(true);  
+      setEncerrarChat(true);
     } else if (escolha === 'sim') {
-      setEscolha(null); 
-      setAjuda(false);  
+      setEscolha(null);
+      setAjuda(false);
     }
   };
 
@@ -89,7 +197,7 @@ const Chatbot: React.FC = () => {
             Assistente FinTech
           </div>
           <div className="h-72 overflow-y-auto mb-2 flex flex-col space-y-3">
-            
+
             {/* Balão de mensagem do chatbot */}
             {!encerrarChat && (
               <div className="relative bg-blue-100 text-black p-3 rounded-lg self-start shadow-md max-w-max">
@@ -106,13 +214,13 @@ const Chatbot: React.FC = () => {
                   onClick={() => Opcao('investimento')}
                   className="bg-blue-600 text-white p-2 rounded-lg"
                 >
-                  Recomendação de investimento 
+                  Recomendação de investimento
                 </button>
                 <button
                   onClick={() => Opcao('noticias')}
                   className="bg-blue-600 text-white p-2 rounded-lg"
                 >
-                  Receber notícias 
+                  Receber notícias
                 </button>
                 <button
                   onClick={() => Opcao('duvida')}
@@ -123,18 +231,23 @@ const Chatbot: React.FC = () => {
               </div>
             )}
 
-            {(escolha === 'investimento'|| escolha === 'noticias' || escolha === 'duvida') && !encerrarChat && (
+            {(escolha === 'investimento' || escolha === 'noticias' || escolha === 'duvida') && !encerrarChat && (
               <div className="relative bg-gray-200 text-black p-3 rounded-lg self-end shadow-md max-w-max">
                 <div>
                   {escolha === 'investimento' && "De qual forma gostaria da minha ajuda"}
                   {escolha === 'noticias' && "Gostaria que eu  te mande notícias do mundo das notícias?"}
-                  {escolha === 'duvida' && "Escolha uma das opções para receber uma explicação do assunto"}
+                  {escolha === 'duvida' && (
+                    <div>
+                      "Escolha uma das opções para receber uma explicação do assunto"
+                      <ImprimeDuvidas />
+                    </div>
+                  )}
                 </div>
                 <div className="absolute -right-2 top-4 w-0 h-0 border-t-[10px] border-t-transparent border-l-[10px] border-l-gray-200 border-b-[10px] border-b-transparent"></div>
               </div>
             )}
 
-            {escolha && !encerrarChat && escolha==='investimento' &&(
+            {escolha && !encerrarChat && escolha === 'investimento' && (
               <div className="mt-4 flex flex-col space-y-1">
                 <button
                   onClick={() => Opcao('perguntas')}
@@ -156,9 +269,9 @@ const Chatbot: React.FC = () => {
                 </button>
               </div>
             )}
-           
-           {(escolha === 'perguntas'|| escolha === 'perfil' || escolha === 'geral') && !encerrarChat && (
-              <div className="relative bg-gray-200 text-black p-3 rounded-lg self-end shadow-md max-w-max"> 
+
+            {(escolha === 'perguntas' || escolha === 'perfil' || escolha === 'geral') && !encerrarChat && (
+              <div className="relative bg-gray-200 text-black p-3 rounded-lg self-end shadow-md max-w-max">
                 <div>
                   {escolha === 'perguntas' && "Para descobrir me responda às próximas perguntas,voce quer continuar"}
                   {escolha === 'perfil' && "Escolha seu perfil de investidor"}
@@ -168,7 +281,7 @@ const Chatbot: React.FC = () => {
               </div>
             )}
 
-            {escolha && !encerrarChat && escolha === 'perguntas'&& (
+            {escolha && !encerrarChat && escolha === 'perguntas' && (
               <div className="mt-4 flex flex-col space-y-1">
                 <button
                   onClick={() => Opcao('rSim')}
@@ -185,8 +298,8 @@ const Chatbot: React.FC = () => {
               </div>
             )}
 
-            {(escolha === 'rSim'|| escolha === 'rNão' ) && !encerrarChat && (
-              <div> 
+            {(escolha === 'rSim' || escolha === 'rNão') && !encerrarChat && (
+              <div>
                 <div className="relative bg-gray-200 text-black p-3 rounded-lg self-end shadow-md max-w-max">
                   {escolha === 'rSim' && questionario[indicePergunta].pergunta}
                   {escolha === 'rNão' && "Tudo bem"}
@@ -194,9 +307,9 @@ const Chatbot: React.FC = () => {
                 {/* <div className="absolute -right-2 top-4 w-0 h-0 border-t-[10px] border-t-transparent border-l-[10px] border-l-gray-200 border-b-[10px] border-b-transparent"></div> */}
                 <ImprimeResposta />
               </div>
-            ) }
+            )}
 
-            
+
             {escolha && !encerrarChat && escolha === 'perfil' && (
               <div className="mt-4 flex flex-col space-y-1">
                 <button
@@ -220,7 +333,7 @@ const Chatbot: React.FC = () => {
               </div>
             )}
 
-            {(escolha === 'conservador'|| escolha === 'moderado' || escolha === 'arrojado')&& !encerrarChat && (
+            {(escolha === 'conservador' || escolha === 'moderado' || escolha === 'arrojado') && !encerrarChat && (
               <div className="relative bg-gray-200 text-black p-3 rounded-lg self-end shadow-md max-w-max">
                 <div>
                   {escolha === 'conservador' && "Opções de investimento para o perfil conservador"}
@@ -230,8 +343,8 @@ const Chatbot: React.FC = () => {
                 <div className="absolute -right-2 top-4 w-0 h-0 border-t-[10px] border-t-transparent border-l-[10px] border-l-gray-200 border-b-[10px] border-b-transparent"></div>
               </div>
             )}
-         
-            {escolha && !encerrarChat && (escolha === 'conservador'|| escolha === 'moderado' || escolha === 'arrojado')&& (
+
+            {escolha && !encerrarChat && (escolha === 'conservador' || escolha === 'moderado' || escolha === 'arrojado') && (
               <div className="mt-4 flex flex-col space-y-1">
                 <button
                   onClick={() => Opcao('sair')}
@@ -244,7 +357,7 @@ const Chatbot: React.FC = () => {
 
 
 
-            {escolha && !encerrarChat && escolha === 'geral'&& (
+            {escolha && !encerrarChat && escolha === 'geral' && (
               <div className="mt-4 flex flex-col space-y-1">
                 <button
                   onClick={() => Opcao('sair')}
@@ -255,11 +368,15 @@ const Chatbot: React.FC = () => {
               </div>
             )}
 
-            
-            
+            {escolha && !encerrarChat && escolha === 'respPerfil' ? (
+              <RespPerfil pontuacao={pontuacao} />
+            ) : null}
 
-           
-           {escolha && !encerrarChat && escolha === 'noticias'&& (
+            {escolha && !encerrarChat && escolha === 'respDuvida' ? (
+              <ImprimeRespDuvidas />
+            ) : null}
+
+            {escolha && !encerrarChat && escolha === 'noticias' && (
               <div className="mt-4 flex flex-col space-y-1">
                 <button
                   onClick={() => Opcao('notSim')}
@@ -275,18 +392,18 @@ const Chatbot: React.FC = () => {
                 </button>
               </div>
             )}
-            
-            {(escolha === 'notSim'|| escolha === 'notNão' ) && !encerrarChat && (
+
+            {(escolha === 'notSim' || escolha === 'notNão') && !encerrarChat && (
               <div className="relative bg-gray-200 text-black p-3 rounded-lg self-end shadow-md max-w-max">
                 <div>
-                {escolha === 'notSim' && "iremos mandar as noticias"}
+                  {escolha === 'notSim' && "iremos mandar as noticias"}
                   {escolha === 'notNão' && "Não iremos mandar as noticias"}
                 </div>
                 <div className="absolute -right-2 top-4 w-0 h-0 border-t-[10px] border-t-transparent border-l-[10px] border-l-gray-200 border-b-[10px] border-b-transparent"></div>
               </div>
             )}
 
-             {escolha && !encerrarChat && (escolha === 'notSim' ||escolha === 'notNão') && (
+            {escolha && !encerrarChat && (escolha === 'notSim' || escolha === 'notNão') && (
               <div className="mt-4 flex flex-col space-y-1">
                 <button
                   onClick={() => Opcao('sair')}
@@ -298,7 +415,7 @@ const Chatbot: React.FC = () => {
             )}
 
 
-            {escolha && !encerrarChat && escolha === 'sair'&&(
+            {escolha && !encerrarChat && escolha === 'sair' && (
               <>
                 <div className="relative bg-blue-100 text-black p-3 rounded-lg self-start shadow-md max-w-max">
                   <div>Posso ajudar em mais alguma coisa?</div>
@@ -322,7 +439,12 @@ const Chatbot: React.FC = () => {
               </>
             )}
 
-            
+            {
+
+
+            }
+
+
             {encerrarChat && (
               <div className="relative bg-blue-100 text-black p-3 rounded-lg self-start shadow-md max-w-max">
                 <div>Tudo bem. Conversa encerrada.</div>
