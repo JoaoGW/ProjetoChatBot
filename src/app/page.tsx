@@ -5,51 +5,50 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { FaMoneyBillWave, FaChartLine, FaBitcoin } from 'react-icons/fa';
 
-interface Source {
-  id: number;
-  name: string;
-}
-
-interface Noticias {
-  source: Source;
-  author: string;
+type Article = {
+  source: {
+    id: string | null;
+    name: string;
+  };
+  author: string | null;
   title: string;
   description: string;
   url: string;
-  urlToImage: string;
+  urlToImage: string | null;
   publishedAt: string;
   content: string;
-}
+};
 
 export default function Economia() {
-  const [noticias, setNoticias] = useState<Noticias[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   // Fetching das notícias, filtrando apenas com conteúdo classificado como válido
-  const noticiasData = async () => {
-    try {
-      const response = await fetch('/api/noticias');
-      if (!response.ok) {
-        throw new Error("A rota falhou ao buscar informações do servidor");
-      }
-
-      const data = await response.json();
-      // Verifica se data.data é um array antes de atualizar o estado
-      if (Array.isArray(data.data)) {
-        setNoticias(data.data);
-      } else {
-        throw new Error("Os dados recebidos não são um array");
-      }
-    } catch (error) {
-      setError((error as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
-    noticiasData();
+    const fetchNews = async () => {
+      try {
+        const response = await fetch("/api/noticias");
+        if (!response.ok) {
+          throw new Error("Erro ao buscar notícias.");
+        }
+
+        const data = await response.json();
+
+        // Filtrar artigos com description diferente de "[Removed]" e limitar a 6 resultados
+        const filteredArticles = (data.data.articles || [])
+          .filter((article: Article) => article.description !== "[Removed]")
+          .slice(0, 6);
+
+        setArticles(filteredArticles);
+        setLoading(false);
+      } catch (err) {
+        setError("Não foi possível carregar as notícias.");
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
   }, []);
 
   return (
@@ -134,16 +133,32 @@ export default function Economia() {
         {/* Notícias Section */}
         <section className="container mx-auto p-6 mt-8">
           <h2 className="text-3xl font-semibold mb-4 text-white">Últimas Notícias</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-black">
-            {noticias.map((data, index) => (
-              <article key={index} className="bg-white p-4 rounded-lg shadow-md">
-                <h3 className="font-semibold text-lg mb-2">{data.title}</h3>
-                <p className="truncate">{data.description}</p>
-                <div className="flex flex-row">
-                  <p>{data.author} - </p>
-                  <p>{data.source.name}</p>
-                </div>
-              </article>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+            {articles.map((article, index) => (
+              <div
+                key={index}
+                className="border rounded-lg p-4 shadow-md hover:shadow-lg transition"
+              >
+                {article.urlToImage && (
+                  <img
+                    src={article.urlToImage}
+                    alt={article.title}
+                    className="w-full h-48 object-cover rounded-md mb-4"
+                  />
+                )}
+                <h2 className="text-lg font-semibold mb-2">{article.title}</h2>
+                <p className="text-sm text-white mb-4">
+                  {article.description || "Sem descrição disponível."}
+                </p>
+                <a
+                  href={article.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  Ler mais
+                </a>
+              </div>
             ))}
           </div>
         </section>
