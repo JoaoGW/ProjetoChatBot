@@ -8,9 +8,9 @@ interface StockItem {
 }
 
 const stocks: StockItem[] = [
-    { name: 'Ibovespa', value: '134.806pts', change: '-0,23%', url: '/ibovespa' },
-    { name: 'DÓLAR', value: 'R$5,50', change: '-0,15%', url: '/dolar' },
-    { name: 'BITCOIN', value: 'R$324.112', change: '+1,51%', url: '/bitcoin' },
+    { name: 'Ibovespa', value: '128.806pts', change: '-0,23%', url: '/ibovespa' },
+    { name: 'DÓLAR', value: 'R$5,73', change: '-0,15%', url: '/dolar' },
+    { name: 'BITCOIN', value: 'R$519.713.41', change: '+1,51%', url: '/bitcoin' },
     { name: 'PETR3', value: 'R$32,50', change: '+0,30%', url: '/petr3' },
     { name: 'VALE3', value: 'R$93,20', change: '-0,45%', url: '/vale3' },
     { name: 'ITUB4', value: 'R$31,40', change: '+0,65%', url: '/itub4' },
