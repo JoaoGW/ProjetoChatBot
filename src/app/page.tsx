@@ -4,6 +4,8 @@ import StockMarquee from '@/components/carrossel';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { FaMoneyBillWave, FaChartLine, FaBitcoin } from 'react-icons/fa';
+import Image from 'next/image'
+import BannerImage from '../assets/banner.jpg'
 
 type Article = {
   source: {
@@ -78,9 +80,27 @@ export default function Economia() {
         <StockMarquee />
 
         {/* Banner */}
-        <section className="bg-cover bg-center h-64 flex items-center justify-center text-white" style={{ backgroundImage: 'url("/path/to/image.jpg")' }}>
-          <h2 className="text-4xl font-bold">Tudo sobre Economia e Investimentos</h2>
+        <section className="relative h-64 flex items-center justify-center text-white">
+          {/* Imagem de fundo */}
+          <Image
+            src={ BannerImage }
+            alt="Banner Background"
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center"
+            priority
+            className="z-0"
+          />
+          {/* Texto */}
+          <div className="relative z-10 text-center">
+            <h2 className="text-4xl font-bold">
+              Tudo sobre Economia e Investimentos
+            </h2>
+          </div>
+          {/* Overlay opcional para contraste */}
+          <div className="absolute inset-0 bg-black bg-opacity-50 z-5"></div>
         </section>
+
 
         {/* Investimento Section */}
         <section id="investimento" className="container mx-auto p-6 mt-8">
