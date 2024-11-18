@@ -9,7 +9,7 @@ export async function GET(Request: NextRequest) {
         }
 
         // Verifica a response retornada da API
-        const response = await fetch(`https://brapi.dev/api/quote/EQTL3?range=1d&interval=1d&fundamental=true&token=${key}`);
+        const response = await fetch(`https://brapi.dev/api/quote/BPAC11?range=1d&interval=1d&fundamental=true&token=${key}`);
         if (!response.ok) {
             throw new Error("Nao foi possivel completar a solictiacao requirida");
         }
